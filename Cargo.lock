@@ -1114,7 +1114,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "theme_generator"
+name = "theme"
 version = "0.1.0"
 dependencies = [
  "image",
