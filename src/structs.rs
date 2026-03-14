@@ -1,7 +1,7 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use tabled::Tabled;
 
-#[derive(Clone, Deserialize, Debug, Tabled)]
+#[derive(Clone, Serialize, Deserialize, Debug, Tabled)]
 pub struct Colors {
     #[tabled(display = "display_color_block")]
     pub primary: String,
@@ -13,7 +13,7 @@ pub struct Colors {
     pub active: String,
 }
 
-#[derive(Clone, Deserialize, Debug, Tabled)]
+#[derive(Clone, Serialize, Deserialize, Debug, Tabled)]
 pub struct Theme {
     pub name: String,
     pub selected: bool,
@@ -23,7 +23,7 @@ pub struct Theme {
     pub wallpaper: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Themes {
     pub themes: Vec<Theme>,
 }
