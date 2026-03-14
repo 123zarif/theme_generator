@@ -1,8 +1,11 @@
 mod list;
 mod make;
+mod select;
+mod structs;
 
 use crate::list::list;
 use crate::make::make;
+use crate::select::select;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -16,8 +19,14 @@ struct Cli {
 enum Commands {
     Make,
     List {
-        #[arg(short, long, global = true)]
+        #[arg(short, long)]
         json: bool,
+        #[arg(short, long)]
+        value: bool,
+    },
+    Select {
+        #[arg(short, long)]
+        index: Option<usize>,
     },
 }
 
@@ -28,8 +37,11 @@ fn main() {
         Commands::Make => {
             make();
         }
-        Commands::List { json } => {
-            list(*json);
+        Commands::List { json, value } => {
+            list(*json, *value);
+        }
+        Commands::Select { index } => {
+            select(*index);
         }
     }
 }
