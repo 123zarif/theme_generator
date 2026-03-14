@@ -1,35 +1,54 @@
+use crate::list::FunctionType;
+use crate::list::list;
+
 pub fn select(index: Option<usize>) {
-    // let themes = match list(false, true) {
-    //     FunctionType::Value(th) => th,
-    //     FunctionType::Format(_) | FunctionType::Json(_) => return,
-    // };
+    let themes = match list(false) {
+        FunctionType::Value(th) => th,
+        FunctionType::Json => return,
+    };
 
     let sel_index: usize = match index {
-        None => get_index(),
-        Some(ind) => ind,
+        None => get_index(themes.themes.len()),
+        Some(ind) => {
+            if ind > themes.themes.len() - 1 {
+                println!(
+                    "Invalid Index Provide. Please provide from (0 - {})",
+                    themes.themes.len() - 1
+                );
+                get_index(themes.themes.len())
+            } else {
+                ind
+            }
+        }
     };
 
     println!("{}", sel_index);
 }
 
-fn get_index() -> usize {
-    let mut input: String = String::new();
+fn get_index(len: usize) -> usize {
     loop {
+        let mut input: String = String::new();
         std::io::stdin().read_line(&mut input).expect("Dumb ass!");
 
-        if input.trim() == "e" {
-            println!("Exited!");
-            continue;
-        }
-
-        let parsed_index: usize = match input.trim().parse() {
-            Ok(num) => num,
+        match input.trim().parse() {
+            Ok(num) => {
+                if num > len - 1 {
+                    println!(
+                        "Invalid Index Provide. Please provide from (0 - {})",
+                        len - 1
+                    );
+                    continue;
+                } else {
+                    return num;
+                }
+            }
             Err(_) => {
-                println!("Invalid Index");
+                println!(
+                    "Invalid Index Provide. Please provide from (0 - {})",
+                    len - 1
+                );
                 continue;
             }
         };
-
-        return parsed_index;
     }
 }

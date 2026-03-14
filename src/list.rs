@@ -15,11 +15,10 @@ struct ThemeRow {
 }
 pub enum FunctionType {
     Value(Themes),
-    Json(String),
-    Format(Table),
+    Json,
 }
 
-pub fn list(json: bool, value: bool) -> FunctionType {
+pub fn list(json: bool) -> FunctionType {
     let home = std::env::var("HOME").unwrap();
 
     let config_path = format!("{}/.config/colorSchemes/themes.json", home);
@@ -28,31 +27,28 @@ pub fn list(json: bool, value: bool) -> FunctionType {
         fs::read_to_string(&config_path).expect("Invalid file! File doesnt exist maybe.");
     let themes: Themes = serde_json::from_str(&json_file).unwrap();
 
-    if json {
-        println!("{:?}", json_file);
+    if !json {
+        let rows: Vec<ThemeRow> = themes
+            .themes
+            .iter()
+            .enumerate()
+            .map(|(index, theme)| ThemeRow {
+                index: index,
+                theme: theme.clone(),
+            })
+            .collect();
 
-        return FunctionType::Json(json_file);
+        let mut table = Table::new(&rows);
+        table.with(Style::modern());
+        table.modify(Columns::first(), Alignment::right());
+
+        println!("{}", table);
     }
 
-    let rows: Vec<ThemeRow> = themes
-        .themes
-        .iter()
-        .enumerate()
-        .map(|(index, theme)| ThemeRow {
-            index: index,
-            theme: theme.clone(),
-        })
-        .collect();
-
-    let mut table = Table::new(&rows);
-    table.with(Style::modern());
-    table.modify(Columns::first(), Alignment::right());
-
-    println!("{}", table);
-
-    if value {
-        return FunctionType::Value(themes);
+    if json {
+        println!("{:?}", json_file);
+        FunctionType::Json
     } else {
-        return FunctionType::Format(table);
+        FunctionType::Value(themes)
     }
 }

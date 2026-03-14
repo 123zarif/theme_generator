@@ -21,8 +21,6 @@ enum Commands {
     List {
         #[arg(short, long)]
         json: bool,
-        #[arg(short, long)]
-        value: bool,
     },
     Select {
         #[arg(short, long)]
@@ -37,8 +35,8 @@ fn main() {
         Commands::Make => {
             make();
         }
-        Commands::List { json, value } => {
-            list(*json, *value);
+        Commands::List { json } => {
+            list(*json);
         }
         Commands::Select { index } => {
             select(*index);
