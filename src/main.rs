@@ -1,8 +1,12 @@
+mod delete;
+mod edit;
 mod list;
 mod make;
 mod select;
 mod structs;
 
+use crate::delete::delete;
+use crate::edit::edit;
 use crate::list::list;
 use crate::make::make;
 use crate::select::select;
@@ -26,6 +30,14 @@ enum Commands {
         #[arg(short, long)]
         index: Option<usize>,
     },
+    Delete {
+        #[arg(short, long)]
+        index: Option<usize>,
+    },
+    Edit {
+        #[arg(short, long)]
+        index: Option<usize>,
+    },
 }
 
 fn main() {
@@ -40,6 +52,12 @@ fn main() {
         }
         Commands::Select { index } => {
             select(*index);
+        }
+        Commands::Delete { index } => {
+            delete(*index);
+        }
+        Commands::Edit { index } => {
+            edit(*index);
         }
     }
 }

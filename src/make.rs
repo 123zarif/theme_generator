@@ -46,7 +46,10 @@ pub fn make() {
         .read_line(&mut theme_name)
         .expect("Dumb ass!");
 
-    let file_name = theme_name.to_lowercase().replace(" ", "_");
+    let file_name = theme_name
+        .to_lowercase()
+        .replace(" ", "_")
+        .replace(".", "_");
 
     let img = image::open(path.trim()).unwrap();
     let resized_img = img.resize(200, 200, image::imageops::FilterType::Triangle);
